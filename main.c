@@ -25,7 +25,6 @@ struct _process {
     struct _process *next;
 };
 
-
 int main(int argv, char **argv)
 {
 	// Parse Arguments
