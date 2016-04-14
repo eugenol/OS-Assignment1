@@ -22,6 +22,7 @@ struct _data {
 
 struct _process {
 	char ID[11];
+    int pid;
 	int arrival;
 	int burst;
 	int priority;
@@ -31,7 +32,7 @@ struct _process {
 
 void add_proc_node(struct _process **head,struct _process data);
 void print_proc_nodes(struct _process *head);
-void add_time_node(struct _data *head,struct _data data);
+void add_time_node(struct _data **head,struct _data data);
 
 
 int main(int argc, char **argv)
@@ -46,9 +47,9 @@ int main(int argc, char **argv)
 	long int quantum = 0;
     char input_file[21] = {0};
 	char scheduler_type[3] ={0};
-    struct _process temp_process = {{0},0,0,0,NULL,NULL};
+    struct _process temp_process = {{0},0,0,0,0,NULL,NULL};
     struct _process *queue_head = NULL;
-    
+    struct _data temp_data = {1,10};
         	
 	if (argc < 3)
 	{
@@ -83,18 +84,41 @@ int main(int argc, char **argv)
 		printf("Could not open input file");
 		return EXIT_FAILURE;
 	}  
-       
-    while(fscanf(fptr,"%s %d %d %d\n",temp_process.ID,&temp_process.arrival,&temp_process.burst,&temp_process.priority)==4)
+    
+    //go through input file and read all values, store in linked list   
+    while(fscanf(fptr,"%s %d %d %d\n", temp_process.ID, &temp_process.arrival, &temp_process.burst, &temp_process.priority)==4)
     {
-        printf("%s %d %d %d\n",temp_process.ID,temp_process.arrival,temp_process.burst,temp_process.priority);
+        //printf("%s %d %d %d %d\n", temp_process.ID, temp_process.arrival, temp_process.burst, temp_process.priority, temp_process.pid);
         add_proc_node(&queue_head,temp_process);
     }
     
-    fclose(fptr);
+    fclose(fptr); //close file
+       
+    add_time_node(&queue_head->time_data,temp_data);
+    add_time_node(&queue_head->time_data,temp_data);
     
-    print_proc_nodes(queue_head);    
+    print_proc_nodes(queue_head);
+        
+/*    
+    if(strcmp(scheduler_type,"RR")==0)
+    {
+   
+    }
+    else if(strcmp(scheduler_type,"RR")==0)
+    {
+        
+    }
+    else if(strcmp(scheduler_type,"RR")==0)
+    {
+        
+    }
+    else if(strcmp(scheduler_type,"RR")==0)
+    {
+        
+    }      
+*/	
+    //free lists
     
-	
 	return 0;	
 }
 
@@ -106,11 +130,38 @@ void add_proc_node(struct _process **head,struct _process data)
     temp = malloc(sizeof(struct _process));
 	
     strcpy(temp->ID, data.ID);
+    temp->pid = data.pid;
 	temp->arrival = data.arrival;
 	temp->burst = data.burst;
 	temp->priority = data.priority;
     temp->time_data = NULL;
     temp->next = NULL;
+    
+    if(!iter)
+    {
+        temp->pid = 0;
+        *head = temp;
+    }
+    else
+    {
+        while(iter->next)
+            iter = iter->next;
+        
+        temp->pid = iter->pid + 1;               
+        iter->next = temp;
+    }
+}
+
+void add_time_node(struct _data **head,struct _data data)
+{
+    struct _data *temp;
+    struct _data *iter = *head;    
+    
+    temp = malloc(sizeof(struct _process));
+    
+    temp->start_time = data.start_time;
+    temp->run_time =data.run_time;
+    temp->next = NULL;  
     
     if(!iter)
     {
@@ -126,38 +177,22 @@ void add_proc_node(struct _process **head,struct _process data)
     }
 }
 
-void add_time_node(struct _data *head,struct _data data)
-{
-    struct _data *temp;
-    struct _data *iter;    
-    
-    temp = malloc(sizeof(struct _process));
-    
-    temp->start_time = data.start_time;
-    temp->run_time =data.run_time;
-    temp->next = NULL;  
-    
-    if(head==NULL)
-    {
-        head = temp;
-    }
-    else
-    {
-        while(iter->next)
-            iter = iter->next;
-                       
-        iter->next = temp;
-        
-    }
-}
-
 void print_proc_nodes(struct _process *head)
 {
     struct _process *iter = head;
+    struct _data *iter2;
        
     while(iter)
     {
-        printf("%s\n",iter->ID);
+        printf("%s %d\n",iter->ID, iter->pid);
+        iter2 = iter->time_data;
+        while(iter2)
+        {
+            printf("(%d %d)",iter2->start_time, iter2->run_time);\
+            iter2 = iter2->next;
+            if(!iter2)
+                printf("\n");
+        }
         iter = iter->next;
     }    
 }
