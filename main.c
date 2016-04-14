@@ -29,7 +29,7 @@ struct _process {
     struct _process *next;
 };
 
-void add_proc_node(struct _process *head,struct _process data);
+void add_proc_node(struct _process **head,struct _process data);
 void print_proc_nodes(struct _process *head);
 void add_time_node(struct _data *head,struct _data data);
 
@@ -46,8 +46,8 @@ int main(int argc, char **argv)
 	long int quantum = 0;
     char input_file[21] = {0};
 	char scheduler_type[3] ={0};
-    struct _process temp_process;
-    struct _process *queue_head;
+    struct _process temp_process = {{0},0,0,0,NULL,NULL};
+    struct _process *queue_head = NULL;
     
         	
 	if (argc < 3)
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     if(strcmp(scheduler_type,"RR")==0)
     {
         quantum = strtol(argv[3],NULL,10);
-        quantum < 1 ? 1 : quantum;       
+        quantum = quantum < 1 ? 1 : quantum;       
     }    
        
     printf("%d\n",quantum);
@@ -84,10 +84,13 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}  
        
-    while(fscanf(fptr,"%s %d %d %d\n"),temp_process.ID,&temp_process.arrival,&temp_process.burst,&temp_process.priority)
+    while(fscanf(fptr,"%s %d %d %d\n",temp_process.ID,&temp_process.arrival,&temp_process.burst,&temp_process.priority)==4)
     {
-        add_proc_node(queue_head,temp_process);
+        printf("%s %d %d %d\n",temp_process.ID,temp_process.arrival,temp_process.burst,temp_process.priority);
+        add_proc_node(&queue_head,temp_process);
     }
+    
+    fclose(fptr);
     
     print_proc_nodes(queue_head);    
     
@@ -95,10 +98,10 @@ int main(int argc, char **argv)
 	return 0;	
 }
 
-void add_proc_node(struct _process *head,struct _process data)
+void add_proc_node(struct _process **head,struct _process data)
 {
     struct _process *temp;
-    struct _process *iter;    
+    struct _process *iter = *head;    
     
     temp = malloc(sizeof(struct _process));
 	
@@ -109,9 +112,9 @@ void add_proc_node(struct _process *head,struct _process data)
     temp->time_data = NULL;
     temp->next = NULL;
     
-    if(head==NULL)
+    if(!iter)
     {
-        head = temp;
+        *head = temp;
     }
     else
     {
@@ -150,13 +153,11 @@ void add_time_node(struct _data *head,struct _data data)
 
 void print_proc_nodes(struct _process *head)
 {
-       struct _process *iter = head;
+    struct _process *iter = head;
        
-       if(head)
-       {
-            while(iter->next)
-            {
-                printf("%s",iter->ID);
-            }    
-       } 
+    while(iter)
+    {
+        printf("%s\n",iter->ID);
+        iter = iter->next;
+    }    
 }
