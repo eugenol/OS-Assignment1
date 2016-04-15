@@ -39,6 +39,11 @@ int queue_length(struct _process *head);
 void sort_queue(struct _process *head);
 void assign_pid(struct _process *head);
 
+//Function prototypes for schedulers
+int FCFS(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum);
+int SJF(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum);
+int RR(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum);
+int PP(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum);
 
 int main(int argc, char **argv)
 {
@@ -55,6 +60,9 @@ int main(int argc, char **argv)
     struct _process temp_process = {{0},0,0,0,0,NULL,NULL,NULL};
     struct _process *queue_head = NULL;
     struct _data temp_data = {1,10};
+    
+    //array of function pointers to scheduling algorithms
+    int (*schedulers[4])(struct _process **, struct _process **, struct _process **, int ) = {FCFS, SJF, RR, PP};
     
     // arg c has to be at least 3 - name of program, and 2 arguments    	
 	if (argc < 3)
@@ -148,9 +156,10 @@ int main(int argc, char **argv)
     
     
     printf("Queue length: %d\n",queue_length(queue_head));
-     
+    
+    schedulers[scheduler];
 
-    //free lists
+    //free lists - NB. have to do this still
     
 	return 0;	
 }
@@ -298,15 +307,35 @@ void assign_pid(struct _process *head)
 {
     struct _process *iter = head;
         
-    if(!iter)
+    if(!iter) //handle empty queue
         return;
     
     iter->pid = 0; //set pid of first entry
     iter = iter->next;
     
-    while(iter)
+    while(iter) //assign in order
     {
         iter->pid = iter->prev->pid+1;
         iter=iter->next;
     }      
+}
+
+int FCFS(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
+{
+    return 0;
+}
+
+int SJF(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
+{
+    return 0;
+}
+
+int RR(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
+{
+    return 0;
+}
+
+int PP(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
+{
+    return 0;
 }
