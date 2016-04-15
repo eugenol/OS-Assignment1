@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	int scheduler;
 	long int quantum = 0;
     char input_file[21] = {0};
-	char scheduler_type[3] ={0};
+	char scheduler_type[5] ={0};
     struct _process temp_process = {{0},0,0,0,0,NULL,NULL};
     struct _process *queue_head = NULL;
     struct _data temp_data = {1,10};
@@ -89,8 +89,24 @@ int main(int argc, char **argv)
         strcpy(input_file, argv[2]);    
     }    
 
+    if(strcmp(scheduler_type,"FCFS")==0)
+        scheduler = 0;
+    else if(strcmp(scheduler_type,"SJF")==0)
+        scheduler = 1;
+    else if(strcmp(scheduler_type,"RR")==0)
+        scheduler = 2;
+    else if(strcmp(scheduler_type,"PP")==0)
+        scheduler = 3;
+    else
+    {
+        printf("Invalid scheduler chosen.\n");
+        return EXIT_FAILURE;
+    }
+
+
     printf("%s\n",input_file);
     printf("%d\n",quantum);
+    printf("%d\n",scheduler);
         
     //Now, read all the data in from the spesified input file
 	fptr = fopen(input_file,"r");	
@@ -113,25 +129,9 @@ int main(int argc, char **argv)
     add_time_node(&queue_head->time_data,temp_data);
     
     print_proc_nodes(queue_head);
-        
-/*    
-    if(strcmp(scheduler_type,"RR")==0)
-    {
-   
-    }
-    else if(strcmp(scheduler_type,"RR")==0)
-    {
-        
-    }
-    else if(strcmp(scheduler_type,"RR")==0)
-    {
-        
-    }
-    else if(strcmp(scheduler_type,"RR")==0)
-    {
-        
-    }      
-*/	
+            
+     
+
     //free lists
     
 	return 0;	
