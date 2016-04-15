@@ -74,13 +74,18 @@ int main(int argc, char **argv)
         quantum = quantum < 1 ? 1 : quantum;
         if (argc < 4)
         {
-            printf("Too few arguments for this scheduling algorithm.");
+            printf("Too few arguments for this scheduling algorithm.\n");
             return EXIT_FAILURE;
         } 
         strcpy(input_file, argv[3]);       
     }
     else
     {
+        if (argc > 3)
+        {
+            printf("Too many arguments for this scheduling algorithm.\n");
+            return EXIT_FAILURE;
+        } 
         strcpy(input_file, argv[2]);    
     }    
 
@@ -91,7 +96,7 @@ int main(int argc, char **argv)
 	fptr = fopen(input_file,"r");	
     if(!fptr)
  	{
-		printf("Could not open input file");
+		printf("Could not open input file\n");
 		return EXIT_FAILURE;
 	}  
     
