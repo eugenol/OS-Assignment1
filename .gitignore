@@ -3,6 +3,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 browse.VC.db
+scheduler
 
 # Compiled source #
 ###################
