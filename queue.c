@@ -120,18 +120,21 @@ void sort_queue(struct _process *head)
                 swap.arrival = iter1->arrival;
                 swap.burst = iter1->burst;
                 swap.priority = iter1->priority;
+                swap.time_data = iter1->time_data;
 
                 //swap iter1 and iter 2
                 strcpy(iter1->ID,iter1->next->ID);
                 iter1->arrival = iter1->next->arrival;
                 iter1->burst = iter1->next->burst;
                 iter1->priority = iter1->next->priority;
+                iter1->time_data = iter1->next->time_data;
 
                 //copy swap into iter 2
                 strcpy(iter1->next->ID,swap.ID);
                 iter1->next->arrival = swap.arrival;
                 iter1->next->burst = swap.burst;
                 iter1->next->priority = swap.priority;
+                iter1->next->time_data = swap.time_data;
                 
                 //swap has occured
                 swapped =1;
@@ -157,4 +160,31 @@ void assign_pid(struct _process *head)
         iter->pid = iter->prev->pid+1;
         iter=iter->next;
     }      
+}
+
+struct _process remove_proc_node_from_front(struct _process **head)
+{
+    struct _process temp = {{0},0,0,0,0,NULL,NULL,NULL};
+    struct _process *iter = *head;
+    
+    if(iter)
+    {
+        if(iter->next)
+        {
+            iter->next->prev = NULL;
+            *head = iter->next;
+        }
+        else
+        {
+            *head = NULL;
+        }
+        
+        strcpy(temp.ID,iter->ID);
+        temp.pid = iter->pid;
+        temp.arrival = iter->arrival;
+        temp.burst = iter->burst;
+        temp.priority = iter->priority;
+        temp.time_data = iter->time_data;
+    }
+    return temp;
 }
