@@ -114,19 +114,18 @@ int main(int argc, char **argv)
     
     fclose(fptr); //close file
    
-    // testing   
-    add_time_node(&process_queue->time_data,temp_data);
-    add_time_node(&process_queue->time_data,temp_data);
-    
-    printf("Unsorted:\n");
-    print_proc_nodes(process_queue);
-    
+    // sort waiting processes accoring to start time
     sort_queue(process_queue);
-    
-    printf("Sorted:\n");
-    print_proc_nodes(process_queue);
-    
+    // assign process id -- according to start time - similar to real OS
     assign_pid(process_queue);
+    //call scheduler here
+    schedulers[scheduler](&process_queue, &ready_queue, &done_queue,0);
+   
+    // testing
+    // below is for testing  
+    add_time_node(&process_queue->time_data,temp_data);
+    add_time_node(&process_queue->time_data,temp_data);
+    
     printf("With pid:\n");
     print_proc_nodes(process_queue);
     printf("Queue length: %d\n",queue_length(process_queue));
@@ -137,8 +136,8 @@ int main(int argc, char **argv)
     print_proc_nodes(process_queue);
     printf("Queue length: %d\n",queue_length(process_queue));
     
-    schedulers[scheduler];
-
+    printf("Queue length: %d\n",queue_length(done_queue));
+    
     //free lists - NB. have to do this still
     
 	return 0;	
