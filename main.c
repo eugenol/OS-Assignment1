@@ -28,11 +28,16 @@ struct _process {
 	int priority;
     struct _data *time_data;
     struct _process *next;
+    struct _process *prev;
 };
 
 void add_proc_node(struct _process **head,struct _process data);
 void print_proc_nodes(struct _process *head);
 void add_time_node(struct _data **head,struct _data data);
+int queue_length(struct _process *head);
+
+void sort_queue(struct _process *head);
+void assign_pid(struct _process *head);
 
 
 int main(int argc, char **argv)
@@ -44,10 +49,10 @@ int main(int argc, char **argv)
 	// Display results
 	FILE *fptr;
 	int scheduler;
-	long int quantum = 0;
+	int quantum = 0;
     char input_file[21] = {0};
 	char scheduler_type[5] ={0};
-    struct _process temp_process = {{0},0,0,0,0,NULL,NULL};
+    struct _process temp_process = {{0},0,0,0,0,NULL,NULL,NULL};
     struct _process *queue_head = NULL;
     struct _data temp_data = {1,10};
     
@@ -70,7 +75,7 @@ int main(int argc, char **argv)
     //otherwise inputfile is in argv[2]
     if(strcmp(scheduler_type,"RR")==0)
     {
-        quantum = strtol(argv[2],NULL,10);
+        quantum = (int)strtol(argv[2],NULL,10);
         quantum = quantum < 1 ? 1 : quantum;
         if (argc < 4)
         {
@@ -124,12 +129,25 @@ int main(int argc, char **argv)
     }
     
     fclose(fptr); //close file
-       
+   
+    // testing   
     add_time_node(&queue_head->time_data,temp_data);
     add_time_node(&queue_head->time_data,temp_data);
     
+    printf("Unsorted:\n");
     print_proc_nodes(queue_head);
-            
+    
+    sort_queue(queue_head);
+    
+    printf("Sorted:\n");
+    print_proc_nodes(queue_head);
+    
+    assign_pid(queue_head);
+    printf("With pid:\n");
+    print_proc_nodes(queue_head);
+    
+    
+    printf("Queue length: %d\n",queue_length(queue_head));
      
 
     //free lists
@@ -139,7 +157,7 @@ int main(int argc, char **argv)
 
 void add_proc_node(struct _process **head,struct _process data)
 {
-    struct _process *temp;
+    struct _process *temp; //new node 
     struct _process *iter = *head;    
     
     temp = malloc(sizeof(struct _process));
@@ -151,10 +169,11 @@ void add_proc_node(struct _process **head,struct _process data)
 	temp->priority = data.priority;
     temp->time_data = NULL;
     temp->next = NULL;
+    temp->next = NULL;
     
     if(!iter)
     {
-        temp->pid = 0;
+        //temp->pid = 0;
         *head = temp;
     }
     else
@@ -162,7 +181,9 @@ void add_proc_node(struct _process **head,struct _process data)
         while(iter->next)
             iter = iter->next;
         
-        temp->pid = iter->pid + 1;               
+        //set correct valuest in temp
+        //temp->pid = iter->pid + 1;
+        temp->prev = iter;               
         iter->next = temp;
     }
 }
@@ -210,4 +231,82 @@ void print_proc_nodes(struct _process *head)
         }
         iter = iter->next;
     }    
+}
+
+int queue_length(struct _process *head)
+{
+    struct _process *iter = head;
+    int count = 0;
+    
+    while(iter)
+    {
+        count++;
+        iter = iter->next;
+    }
+    
+    return count;    
+}
+
+void sort_queue(struct _process *head)
+{
+    struct _process *iter1 = head;
+    struct _process *iter2 = NULL;
+    struct _process swap = {{0},0,0,0,0,NULL,NULL,NULL};
+    
+    int swapped;
+    
+    if(!head)
+        return;
+    
+    do
+    {
+        swapped = 0;
+        iter1 = head;
+        
+        while(iter1->next != iter2)
+        {
+            if(iter1->arrival > iter1->next->arrival)
+            {
+                //copy iter 1 values to swap
+                strcpy(swap.ID,iter1->ID);
+                swap.arrival = iter1->arrival;
+                swap.burst = iter1->burst;
+                swap.priority = iter1->priority;
+
+                //swap iter1 and iter 2
+                strcpy(iter1->ID,iter1->next->ID);
+                iter1->arrival = iter1->next->arrival;
+                iter1->burst = iter1->next->burst;
+                iter1->priority = iter1->next->priority;
+
+                //copy swap into iter 2
+                strcpy(iter1->next->ID,swap.ID);
+                iter1->next->arrival = swap.arrival;
+                iter1->next->burst = swap.burst;
+                iter1->next->priority = swap.priority;
+                
+                //swap has occured
+                swapped =1;
+            }
+            iter1=iter1->next;
+        }
+        iter2 = iter1;
+    } while (swapped);  
+}
+
+void assign_pid(struct _process *head)
+{
+    struct _process *iter = head;
+        
+    if(!iter)
+        return;
+    
+    iter->pid = 0; //set pid of first entry
+    iter = iter->next;
+    
+    while(iter)
+    {
+        iter->pid = iter->prev->pid+1;
+        iter=iter->next;
+    }      
 }
