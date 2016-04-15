@@ -32,7 +32,9 @@ int main(int argc, char **argv)
     char input_file[21] = {0};
 	char scheduler_type[5] ={0};
     struct _process temp_process = {{0},0,0,0,0,NULL,NULL,NULL};
-    struct _process *queue_head = NULL;
+    struct _process *process_queue = NULL;
+    struct _process *ready_queue = NULL;
+    struct _process *done_queue = NULL;
     struct _data temp_data = {1,10};
     
     //array of function pointers to scheduling algorithms
@@ -107,29 +109,28 @@ int main(int argc, char **argv)
     while(fscanf(fptr,"%s %d %d %d\n", temp_process.ID, &temp_process.arrival, &temp_process.burst, &temp_process.priority)==4)
     {
         //printf("%s %d %d %d %d\n", temp_process.ID, temp_process.arrival, temp_process.burst, temp_process.priority, temp_process.pid);
-        add_proc_node(&queue_head,temp_process);
+        add_proc_node(&process_queue,temp_process);
     }
     
     fclose(fptr); //close file
    
     // testing   
-    add_time_node(&queue_head->time_data,temp_data);
-    add_time_node(&queue_head->time_data,temp_data);
+    add_time_node(&process_queue->time_data,temp_data);
+    add_time_node(&process_queue->time_data,temp_data);
     
     printf("Unsorted:\n");
-    print_proc_nodes(queue_head);
+    print_proc_nodes(process_queue);
     
-    sort_queue(queue_head);
+    sort_queue(process_queue);
     
     printf("Sorted:\n");
-    print_proc_nodes(queue_head);
+    print_proc_nodes(process_queue);
     
-    assign_pid(queue_head);
+    assign_pid(process_queue);
     printf("With pid:\n");
-    print_proc_nodes(queue_head);
+    print_proc_nodes(process_queue);
     
-    
-    printf("Queue length: %d\n",queue_length(queue_head));
+    printf("Queue length: %d\n",queue_length(process_queue));
     
     schedulers[scheduler];
 
