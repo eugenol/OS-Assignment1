@@ -15,7 +15,7 @@ void add_proc_node(struct _process **head,struct _process data)
 	temp->arrival = data.arrival;
 	temp->burst = data.burst;
 	temp->priority = data.priority;
-    temp->time_data = NULL;
+    temp->time_data = data.time_data;
     temp->next = NULL;
     temp->next = NULL;
     
