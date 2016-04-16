@@ -130,13 +130,16 @@ int main(int argc, char **argv)
     print_proc_nodes(process_queue);
     printf("Queue length: %d\n",queue_length(process_queue));
     
-    remove_proc_node_from_front(&process_queue);
+    //remove_proc_node_from_front(&process_queue);
     
     printf("With pid:\n");
     print_proc_nodes(process_queue);
     printf("Queue length: %d\n",queue_length(process_queue));
     
     printf("Queue length: %d\n",queue_length(done_queue));
+    
+    printf("Total proc time: %d\n", proc_time_done(process_queue));
+    printf("Total proc time: %d\n", proc_time_done(process_queue->next));
     
     //free lists - NB. have to do this still
     

@@ -35,7 +35,16 @@ void add_proc_node(struct _process **head,struct _process data)
         iter->next = temp;
     }
 }
-
+/*
+void free_queue(struct _data **head)
+{
+    //if queue is empty, do nothing
+    if(!*head)
+        return;
+        
+    
+}
+*/
 void add_time_node(struct _data **head,struct _data data)
 {
     struct _data *temp;
@@ -113,7 +122,6 @@ void sort_queue(struct _process *head, int (*sort_function)(struct _process *ite
         
         while(iter1->next != iter2)
         {
-            printf("Here\n");
             //if(iter1->arrival > iter1->next->arrival)
             if(sort_function(iter1,iter1->next))
             {
@@ -149,10 +157,10 @@ void sort_queue(struct _process *head, int (*sort_function)(struct _process *ite
 
 int sort_by_arrival(struct _process *item1, struct _process *item2)
 {
-    if(item1->arrival > item2->arrival) { printf("True\n");
-        return 1;}
-    else { printf("False\n");
-        return 0; }
+    if(item1->arrival > item2->arrival)
+        return 1;
+    else
+        return 0;
 }
 
 void assign_pid(struct _process *head)
@@ -197,4 +205,21 @@ struct _process remove_proc_node_from_front(struct _process **head)
         temp.time_data = iter->time_data;
     }
     return temp;
+}
+
+int proc_time_done(struct _process *proc)
+{
+    int total_proc_time = 0;
+    struct _data *iter = proc->time_data;
+    
+    if(!iter)
+        return total_proc_time;
+    
+    while(iter)   
+    {
+        total_proc_time+=iter->run_time;
+        iter = iter->next;
+    }
+    
+    return total_proc_time;
 }
