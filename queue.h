@@ -19,14 +19,21 @@ struct _process {
 };
 
 void add_proc_node(struct _process **head,struct _process data);
-void print_proc_nodes(struct _process *head);
-void sort_queue(struct _process *head);
-int queue_length(struct _process *head);
 struct _process remove_proc_node_from_front(struct _process **head);
 
 void add_time_node(struct _data **head,struct _data data);
 
+void print_proc_nodes(struct _process *head);
+
+int queue_length(struct _process *head);
+
 void assign_pid(struct _process *head);
+
+// sort functions
+//void sort_queue(struct _process *head);
+void sort_queue(struct _process *head, int (*sort_function)(struct _process *item1, struct _process *item2));
+// 
+int sort_by_arrival(struct _process *item1, struct _process *item2);
 
 
 #endif /*QUEUE_H*/

@@ -95,7 +95,7 @@ int queue_length(struct _process *head)
     return count;    
 }
 
-void sort_queue(struct _process *head)
+void sort_queue(struct _process *head, int (*sort_function)(struct _process *item1, struct _process *item2))
 {
     struct _process *iter1 = head;
     struct _process *iter2 = NULL;
@@ -113,7 +113,9 @@ void sort_queue(struct _process *head)
         
         while(iter1->next != iter2)
         {
-            if(iter1->arrival > iter1->next->arrival)
+            printf("Here\n");
+            //if(iter1->arrival > iter1->next->arrival)
+            if(sort_function(iter1,iter1->next))
             {
                 //copy iter 1 values to swap
                 strcpy(swap.ID,iter1->ID);
@@ -143,6 +145,14 @@ void sort_queue(struct _process *head)
         }
         iter2 = iter1;
     } while (swapped);  
+}
+
+int sort_by_arrival(struct _process *item1, struct _process *item2)
+{
+    if(item1->arrival > item2->arrival) { printf("True\n");
+        return 1;}
+    else { printf("False\n");
+        return 0; }
 }
 
 void assign_pid(struct _process *head)

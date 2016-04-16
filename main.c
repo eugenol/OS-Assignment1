@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     fclose(fptr); //close file
    
     // sort waiting processes accoring to start time
-    sort_queue(process_queue);
+    sort_queue(process_queue, sort_by_arrival);
     // assign process id -- according to start time - similar to real OS
     assign_pid(process_queue);
     //call scheduler here
