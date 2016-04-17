@@ -35,6 +35,7 @@ void add_proc_node(struct _process **head,struct _process data)
         iter->next = temp;
     }
 }
+
 /*
 void free_queue(struct _data **head)
 {
@@ -77,11 +78,11 @@ void print_proc_nodes(struct _process *head)
        
     while(iter)
     {
-        printf("%s %d\n",iter->ID, iter->pid);
+        printf("%s %d %d\n",iter->ID, iter->pid, iter->arrival);
         iter2 = iter->time_data;
         while(iter2)
         {
-            printf("(%d %d)",iter2->start_time, iter2->run_time);\
+            printf("(%d %d) ",iter2->start_time, iter2->run_time);\
             iter2 = iter2->next;
             if(!iter2)
                 printf("\n");
@@ -163,6 +164,14 @@ int sort_by_arrival(struct _process *item1, struct _process *item2)
         return 0;
 }
 
+int sort_by_pid(struct _process *item1, struct _process *item2)
+{
+    if(item1->pid > item2->pid)
+        return 1;
+    else
+        return 0;
+}
+
 void assign_pid(struct _process *head)
 {
     struct _process *iter = head;
@@ -203,7 +212,48 @@ struct _process remove_proc_node_from_front(struct _process **head)
         temp.burst = iter->burst;
         temp.priority = iter->priority;
         temp.time_data = iter->time_data;
+        
+        free(iter);
+        iter = NULL;
     }
+    return temp;
+}
+
+struct _process remove_proc_node(struct _process **head, struct _process *node)
+{
+    struct _process temp = {{0},0,0,0,0,NULL,NULL,NULL};
+    struct _process *iter = node;
+    
+    if(iter)
+    {
+        if(iter == *head)
+        {
+            temp = remove_proc_node_from_front(&*head);
+        }
+        else
+        {
+            if(iter->next)
+            {
+                iter->next->prev = iter->prev;
+            }
+            
+            if(iter->prev)
+            {
+                iter->prev->next = iter->next;
+            }
+           
+            strcpy(temp.ID,iter->ID);
+            temp.pid = iter->pid;
+            temp.arrival = iter->arrival;
+            temp.burst = iter->burst;
+            temp.priority = iter->priority;
+            temp.time_data = iter->time_data;
+            
+            free(iter);
+            iter = NULL;
+        }
+    }
+        
     return temp;
 }
 
@@ -222,4 +272,21 @@ int proc_time_done(struct _process *proc)
     }
     
     return total_proc_time;
+}
+
+struct _process *new_node_address(struct _process *head)
+{
+    struct _process *iter = head;    
+    
+    if(!iter)
+    {
+        return NULL;
+    }
+    else
+    {
+        while(iter->next)
+            iter = iter->next;
+        
+        return iter;
+    }
 }

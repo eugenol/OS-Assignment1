@@ -35,7 +35,8 @@ int main(int argc, char **argv)
     struct _process *process_queue = NULL;
     struct _process *ready_queue = NULL;
     struct _process *done_queue = NULL;
-    struct _data temp_data = {1,10};
+    //struct _data temp_data = {1,10};
+    int total_run_time = 0;
     
     //array of function pointers to scheduling algorithms
     int (*schedulers[4])(struct _process **, struct _process **, struct _process **, int ) = {FCFS, SJF, RR, PP};
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
     printf("%s\n",input_file);
     printf("%d\n",quantum);
     printf("%d\n",scheduler);
-        
+
     //Now, read all the data in from the spesified input file
 	fptr = fopen(input_file,"r");	
     if(!fptr)
@@ -104,7 +105,7 @@ int main(int argc, char **argv)
 		printf("Could not open input file\n");
 		return EXIT_FAILURE;
 	}  
-    
+
     //go through input file and read all values, store in linked list   
     while(fscanf(fptr,"%s %d %d %d\n", temp_process.ID, &temp_process.arrival, &temp_process.burst, &temp_process.priority)==4)
     {
@@ -113,16 +114,22 @@ int main(int argc, char **argv)
     }
     
     fclose(fptr); //close file
-   
+
     // sort waiting processes accoring to start time
     sort_queue(process_queue, sort_by_arrival);
     // assign process id -- according to start time - similar to real OS
     assign_pid(process_queue);
     //call scheduler here
-    schedulers[scheduler](&process_queue, &ready_queue, &done_queue,0);
+
+    total_run_time = schedulers[scheduler](&process_queue, &ready_queue, &done_queue, quantum);
+   
+    sort_queue(done_queue, sort_by_arrival);
+    print_proc_nodes(done_queue);
+    printf("Total Run Time: %d\n",total_run_time);
    
     // testing
     // below is for testing  
+    /*
     add_time_node(&process_queue->time_data,temp_data);
     add_time_node(&process_queue->time_data,temp_data);
     
@@ -141,6 +148,15 @@ int main(int argc, char **argv)
     printf("Total proc time: %d\n", proc_time_done(process_queue));
     printf("Total proc time: %d\n", proc_time_done(process_queue->next));
     
+    printf("Original");
+    print_proc_nodes(process_queue);
+    remove_proc_node(&process_queue,process_queue);
+    printf("Head Removed\n");
+    print_proc_nodes(process_queue);
+    remove_proc_node(&process_queue,process_queue->next->next);
+    printf("Other removed\n");
+    print_proc_nodes(process_queue);
+    */
     //free lists - NB. have to do this still
     
 	return 0;	

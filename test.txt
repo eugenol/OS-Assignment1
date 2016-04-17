@@ -1,0 +1,148 @@
+RR
+input.txt
+3
+2
+Begin Scheduler
+Run time: 5
+Running process: 0
+Run Time: 8
+Queue lengths: 9 1 0
+Adding: 1
+Adding: 2
+Adding: 3
+Running process: 1
+Run Time: 11
+Running process: 2
+Run Time: 12
+Running process: 3
+Run Time: 15
+Queue lengths: 6 3 1
+Adding: 4
+Adding: 5
+Adding: 6
+Adding: 7
+Adding: 8
+Running process: 4
+Run Time: 18
+Running process: 5
+Run Time: 21
+Running process: 6
+Run Time: 24
+Running process: 7
+Run Time: 27
+Running process: 8
+Run Time: 30
+Queue lengths: 1 8 1
+Adding: 9
+Running process: 9
+Run Time: 33
+Queue lengths: 0 9 1
+Running process: 0
+Run Time: 36
+Running process: 1
+Run Time: 39
+Running process: 3
+Run Time: 42
+Running process: 4
+Run Time: 45
+Running process: 5
+Run Time: 48
+Running process: 6
+Run Time: 51
+Running process: 7
+Run Time: 54
+Running process: 8
+Run Time: 57
+Running process: 9
+Run Time: 60
+Queue lengths: 0 9 1
+Running process: 0
+Run Time: 61
+Running process: 1
+Run Time: 64
+Running process: 3
+Run Time: 67
+Running process: 4
+Run Time: 70
+Running process: 5
+Run Time: 73
+Running process: 6
+Run Time: 76
+Running process: 7
+Run Time: 79
+Running process: 8
+Run Time: 82
+Running process: 9
+Run Time: 85
+Queue lengths: 0 6 4
+Running process: 1
+Run Time: 86
+Running process: 3
+Run Time: 89
+Running process: 6
+Run Time: 91
+Running process: 7
+Run Time: 94
+Running process: 8
+Run Time: 95
+Running process: 9
+Run Time: 96
+Queue lengths: 0 2 8
+Running process: 3
+Run Time: 99
+Running process: 7
+Run Time: 102
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 105
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 108
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 111
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 114
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 117
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 120
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 123
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 126
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 129
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 132
+Queue lengths: 0 1 9
+Running process: 7
+Run Time: 134
+Queue lengths: 0 0 10
+Process9 2 5
+(0 3) (28 3) (55 1) 
+Process8 0 6
+(6 1) 
+Process1 4 6
+(3 3) (31 3) (56 3) (80 1) 
+Process7 5 7
+(7 3) (34 3) (59 3) (81 3) (91 3) 
+Process0 1 10
+(10 3) (37 3) (62 3) 
+Process6 6 10
+(13 3) (40 3) (65 3) 
+Process2 8 12
+(16 3) (43 3) (68 3) (84 2) 
+Process5 9 12
+(22 3) (49 3) (74 3) (89 1) 
+Process4 3 12
+(19 3) (46 3) (71 3) (86 3) (94 3) (97 3) (100 3) (103 3) (106 3) (109 3) (112 3) (115 3) (118 3) (121 3) (124 3) (127 2) 
+Process3 7 18
+(25 3) (52 3) (77 3) (90 1) 
