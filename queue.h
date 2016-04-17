@@ -38,6 +38,6 @@ void assign_pid(struct _process *head);
 void sort_queue(struct _process *head, int (*sort_function)(struct _process *item1, struct _process *item2));
 // 
 int sort_by_arrival(struct _process *item1, struct _process *item2);
-int sort_by_burst_time(struct _process *item1, struct _process *item2);
+int sort_by_time_left(struct _process *item1, struct _process *item2);
 
 #endif /*QUEUE_H*/
