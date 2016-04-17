@@ -1,6 +1,7 @@
 #include "RR.h"
 #include "queue.h"
 #include <limits.h>
+#include <stdio.h>
 
 int RR(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
 {
@@ -9,7 +10,7 @@ int RR(struct _process **process_queue, struct _process **ready_queue, struct _p
     int next_run_time = 0;
     int time_left = 0;
     int isempty = 0;
-    struct _process temp_proc; = {{0},0,0,0,0,NULL,NULL,NULL};
+    struct _process temp_proc = {{0},0,0,0,0,NULL,NULL,NULL};
     struct _process *iter;
     struct _process *temp_ptr;
     struct _process *temp_queue = NULL;
