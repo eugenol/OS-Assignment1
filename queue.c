@@ -178,6 +178,28 @@ int sort_by_time_left(struct _process *item1, struct _process *item2)
         return 0;
 }
 
+int sort_by_priority(struct _process *item1, struct _process *item2)
+{
+    int last_run_time_item1 = 0;
+    int last_run_time_item2 = 0;
+    
+    if(item1->priority < item2->priority)
+        return 1;
+    else if (item1->priority == item2->priority)
+    {
+       /* //if equal priorities, run the one that hasnt run the longest
+        if(!item1->time_data)
+            last_run_time_item1 = 0;
+        else
+        {
+       
+        }*/
+        
+    }
+    else
+        return 0;
+}
+
 void assign_pid(struct _process *head)
 {
     struct _process *iter = head;

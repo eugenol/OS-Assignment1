@@ -39,5 +39,6 @@ void sort_queue(struct _process *head, int (*sort_function)(struct _process *ite
 // 
 int sort_by_arrival(struct _process *item1, struct _process *item2);
 int sort_by_time_left(struct _process *item1, struct _process *item2);
+int sort_by_priority(struct _process *item1, struct _process *item2);
 
 #endif /*QUEUE_H*/
