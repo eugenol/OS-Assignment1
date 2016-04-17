@@ -164,9 +164,9 @@ int sort_by_arrival(struct _process *item1, struct _process *item2)
         return 0;
 }
 
-int sort_by_pid(struct _process *item1, struct _process *item2)
+int sort_by_burst_time(struct _process *item1, struct _process *item2)
 {
-    if(item1->pid > item2->pid)
+    if(item1->burst > item2->burst)
         return 1;
     else
         return 0;

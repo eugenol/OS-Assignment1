@@ -126,6 +126,7 @@ int main(int argc, char **argv)
     sort_queue(done_queue, sort_by_arrival);
     print_proc_nodes(done_queue);
     printf("Total Run Time: %d\n",total_run_time);
+     
    
     // testing
     // below is for testing  
