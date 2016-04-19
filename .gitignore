@@ -1,7 +1,6 @@
 # Files in this project #
 #########################
-.vscode/c_cpp_properties.json
-.vscode/launch.json
+.vscode/*.*
 browse.VC.db
 scheduler
 
