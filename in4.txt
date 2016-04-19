@@ -1,0 +1,9 @@
+Process1 0 4 2
+Process2 1 2 4
+Process3 2 3 6
+Process4 3 5 10
+Process5 4 1 8
+Process6 5 4 12
+Process7 6 6 9
+
+

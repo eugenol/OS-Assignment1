@@ -25,6 +25,7 @@ struct _process remove_proc_node(struct _process **head, struct _process *node);
 //Time node stuff
 void add_time_node(struct _data **head, struct _data data);
 int proc_time_done(struct _process *proc);
+struct _data *get_last_time_node(struct _process *proc);
 
 void print_proc_nodes(struct _process *head);
 

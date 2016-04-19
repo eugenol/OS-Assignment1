@@ -322,6 +322,21 @@ int proc_time_done(struct _process *proc)
     return total_proc_time;
 }
 
+struct _data *get_last_time_node(struct _process *proc)
+{
+    struct _data *iter = proc->time_data;
+    
+    if(!iter)
+        return NULL;
+    
+    while(iter->next)   
+    {
+        iter = iter->next;
+    }
+    
+    return iter;
+}
+
 struct _process *new_node_address(struct _process *head)
 {
     struct _process *iter = head;    

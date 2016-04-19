@@ -15,6 +15,7 @@ int RR(struct _process **process_queue, struct _process **ready_queue, struct _p
     struct _process *temp_ptr;
     struct _process *temp_queue = NULL;
     struct _data temp_time_data = {0, 0, NULL};
+    struct _data *last_time = NULL;
     
     // if there is a process queue, send first process to the ready queue, set runtime
     // to start time, otherwise exit
@@ -76,10 +77,18 @@ int RR(struct _process **process_queue, struct _process **ready_queue, struct _p
             time_left = iter->burst - proc_time_done(iter);
             if(time_left > quantum)
             {
-                //add info to time done
-                temp_time_data.start_time = runtime - first_proc_time;
-                temp_time_data.run_time = quantum;
-                add_time_node(&iter->time_data,temp_time_data);
+                last_time = get_last_time_node(iter);
+                if(last_time && last_time->start_time+last_time->run_time + first_proc_time == runtime)
+                {
+                    last_time->run_time =  last_time->run_time + quantum;
+                }
+                else
+                {
+                    //add info to time done
+                    temp_time_data.start_time = runtime - first_proc_time;
+                    temp_time_data.run_time = quantum;
+                    add_time_node(&iter->time_data,temp_time_data);
+                }
                 //move runtime on by quantum
                 runtime += quantum;
                 temp_ptr = iter;
@@ -91,15 +100,24 @@ int RR(struct _process **process_queue, struct _process **ready_queue, struct _p
             else
             {
                 //add info to time done
-                //move runtime forward by time_left
-                temp_time_data.start_time = runtime - first_proc_time;
-                temp_time_data.run_time = time_left;
-                add_time_node(&iter->time_data,temp_time_data);
+                last_time = get_last_time_node(iter);
+                if(last_time && last_time->start_time+last_time->run_time + first_proc_time == runtime)
+                {
+                    last_time->run_time =  last_time->run_time + time_left;
+                }
+                else
+                {
+                    //add info to time done
+                    temp_time_data.start_time = runtime - first_proc_time;
+                    temp_time_data.run_time = time_left;
+                    add_time_node(&iter->time_data,temp_time_data);
+                }
                 temp_ptr = iter;
                 iter = iter->next; // point to next node
                 //move process to done queue
                 temp_proc = remove_proc_node(&*ready_queue, temp_ptr);
                 add_proc_node(&*done_queue,temp_proc);
+                //move runtime forward by time_left
                 runtime += time_left;
             }
             isempty = 1;
