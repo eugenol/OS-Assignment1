@@ -1,5 +1,7 @@
 #include "SJF.h"
 #include "queue.h"
+#include <stdio.h>
+#include <limits.h>
 
 int SJF(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
 {
@@ -72,20 +74,24 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
         //fix for long wait between processes                 
         isempty = 0;
         
+        sort_queue(*ready_queue, sort_by_time_left);
+        
         //start at head of queue            
         iter = *ready_queue;
         while(iter)
         {
-            // check if process is done.
+            // check time left for process
             time_left = iter->burst - proc_time_done(iter);
-            if(time_left > quantum)
+            
+            // check if this process can complete before next one arrives
+            if(runtime + time_left > next_run_time)
             {
                 //add info to time done
                 temp_time_data.start_time = runtime - first_proc_time;
-                temp_time_data.run_time = quantum;
+                temp_time_data.run_time = next_run_time-runtime;
                 add_time_node(&iter->time_data,temp_time_data);
                 //move runtime on by quantum
-                runtime += quantum;
+                runtime = next_run_time;
                 temp_ptr = iter;
                 iter = iter->next;
                 //move process to temp queue to re add later
