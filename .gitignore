@@ -27,11 +27,12 @@ scheduler
 *.tar
 *.zip
 
-# Logs and databases #
+# Logs, output files and databases #
 ######################
 *.log
 *.sql
 *.sqlite
+*.txt
 
 # OS generated files #
 ######################
