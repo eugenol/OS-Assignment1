@@ -56,9 +56,9 @@ int main(int argc, char **argv)
     strcpy(scheduler_type, argv[1]); 
     printf("%s\n",scheduler_type);
        
-    //if round robin, read quantum and input file in argv[3]
+    //if round robin or priority with preemption, read quantum and input file in argv[3]
     //otherwise inputfile is in argv[2]
-    if(strcmp(scheduler_type,"RR")==0)
+    if(strcmp(scheduler_type,"RR")==0 || strcmp(scheduler_type,"PP")==0)
     {
         quantum = (int)strtol(argv[2],NULL,10);
         quantum = quantum < 1 ? 1 : quantum;
