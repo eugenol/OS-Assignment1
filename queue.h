@@ -21,6 +21,7 @@ struct _process {
 void add_proc_node(struct _process **head,struct _process data);
 struct _process remove_proc_node_from_front(struct _process **head);
 struct _process remove_proc_node(struct _process **head, struct _process *node);
+void free_queue(struct _process **head);
 
 //Time node stuff
 void add_time_node(struct _data **head, struct _data data);
@@ -41,5 +42,8 @@ void sort_queue(struct _process *head, int (*sort_function)(struct _process *ite
 int sort_by_arrival(struct _process *item1, struct _process *item2);
 int sort_by_time_left(struct _process *item1, struct _process *item2);
 int sort_by_priority(struct _process *item1, struct _process *item2);
+int sort_by_name(struct _process *item1, struct _process *item2);
+
+void turnaround_wait_time(struct _process *queue, float *avg_turnaround_time, float *avg_waiting_time);
 
 #endif /*QUEUE_H*/

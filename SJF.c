@@ -12,7 +12,6 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
     */
     
     int runtime = 0;
-    int first_proc_time = 0;
     int next_run_time = 0;
     int time_left = 0;
     int isempty = 0;
@@ -30,7 +29,7 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
     {
         temp_proc = remove_proc_node_from_front(&*process_queue);
         add_proc_node(&*ready_queue,temp_proc);
-        runtime = first_proc_time = temp_proc.arrival;
+        runtime = temp_proc.arrival;
         
         if((*process_queue)->next)
             next_run_time = (*process_queue)->next->arrival;
@@ -88,14 +87,14 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
             if(runtime + time_left > next_run_time)
             {
                 last_time = get_last_time_node(iter);
-                if(last_time && last_time->start_time+last_time->run_time + first_proc_time == runtime)
+                if(last_time && last_time->start_time+last_time->run_time == runtime)
                 {
                     last_time->run_time =  last_time->run_time + next_run_time-runtime;
                 }
                 else
                 {
                     //add info to time done
-                    temp_time_data.start_time = runtime - first_proc_time;
+                    temp_time_data.start_time = runtime;
                     temp_time_data.run_time = next_run_time-runtime;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
@@ -110,14 +109,14 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
             else
             {
                 last_time = get_last_time_node(iter);
-                if(last_time && last_time->start_time+last_time->run_time + first_proc_time == runtime)
+                if(last_time && last_time->start_time+last_time->run_time == runtime)
                 {
                     last_time->run_time =  last_time->run_time + time_left;
                 }
                 else
                 {
                     //move runtime forward by time_left
-                    temp_time_data.start_time = runtime - first_proc_time;
+                    temp_time_data.start_time = runtime;
                     temp_time_data.run_time = time_left;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
@@ -145,5 +144,5 @@ int SJF(struct _process **process_queue, struct _process **ready_queue, struct _
             runtime++;
         }       
     }
-    return runtime;// -first_proc_time;
+    return runtime;
 }

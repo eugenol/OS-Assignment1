@@ -6,7 +6,6 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
 {
     int runtime = 0;
     int burst_time = 0;
-    int first_proc_time = 0;
     struct _process temp_proc = {{0},0,0,0,0,NULL,NULL,NULL};
     struct _data temp_time_data = {0, 0, NULL};
     
@@ -18,7 +17,7 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
     // this gets the ball rolling
     if(*ready_queue)
     {
-        runtime = first_proc_time = (*ready_queue)->arrival;
+        runtime = (*ready_queue)->arrival;
     }
     else
     {
@@ -32,7 +31,7 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
         //add info to time done
         //move runtime forward by time_left
         burst_time = (*ready_queue)->burst;
-        temp_time_data.start_time = runtime - first_proc_time;
+        temp_time_data.start_time = runtime;
         temp_time_data.run_time = burst_time;
         add_time_node(&(*ready_queue)->time_data,temp_time_data);
         //move process to done queue
@@ -40,5 +39,5 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
         add_proc_node(&*done_queue,temp_proc);
         runtime += burst_time;
     }
-    return runtime;// -first_proc_time;
+    return runtime;
 }

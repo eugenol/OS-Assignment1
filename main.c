@@ -37,6 +37,8 @@ int main(int argc, char **argv)
     struct _process *done_queue = NULL;
     //struct _data temp_data = {1,10};
     int total_run_time = 0;
+    float avg_turnaround_time = 0;
+    float avg_waiting_time = 0;
     
     //array of function pointers to scheduling algorithms
     int (*schedulers[4])(struct _process **, struct _process **, struct _process **, int ) = {FCFS, SJF, RR, PP};
@@ -123,10 +125,19 @@ int main(int argc, char **argv)
 
     total_run_time = schedulers[scheduler](&process_queue, &ready_queue, &done_queue, quantum);
    
-    sort_queue(done_queue, sort_by_arrival);
+    sort_queue(done_queue, sort_by_name);
     print_proc_nodes(done_queue);
+    
+    printf("Number of processes: %d\n",queue_length(done_queue));
     printf("Total Run Time: %d\n",total_run_time);
-     
+    printf("Throughput: %f\n", (float)queue_length(done_queue)/total_run_time);
+    
+    turnaround_wait_time(done_queue, &avg_turnaround_time, &avg_waiting_time);
+    
+    printf("Average turnaround time: %f\n", avg_turnaround_time);
+    printf("Average waiting time: %f\n", avg_waiting_time);
+   
+    free_queue(&done_queue);
    
     // testing
     // below is for testing  

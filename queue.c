@@ -36,16 +36,6 @@ void add_proc_node(struct _process **head,struct _process data)
     }
 }
 
-/*
-void free_queue(struct _data **head)
-{
-    //if queue is empty, do nothing
-    if(!*head)
-        return;
-        
-    
-}
-*/
 void add_time_node(struct _data **head,struct _data data)
 {
     struct _data *temp;
@@ -78,11 +68,12 @@ void print_proc_nodes(struct _process *head)
        
     while(iter)
     {
-        printf("%s %d %d\n",iter->ID, iter->pid, iter->arrival);
+        printf("%s %d ",iter->ID, iter->arrival);
+        //printf("%s ",iter->ID);
         iter2 = iter->time_data;
         while(iter2)
         {
-            printf("(%d %d) ",iter2->start_time, iter2->run_time);\
+            printf("(%d,%d) ",iter2->start_time, iter2->run_time);\
             iter2 = iter2->next;
             if(!iter2)
                 printf("\n");
@@ -220,6 +211,14 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
         return 0;
 }
 
+int sort_by_name(struct _process *item1, struct _process *item2)
+{  
+    if(strcmp(item1->ID,item2->ID) > 0)
+        return 1;
+    else
+        return 0;
+}
+
 void assign_pid(struct _process *head)
 {
     struct _process *iter = head;
@@ -352,4 +351,97 @@ struct _process *new_node_address(struct _process *head)
         
         return iter;
     }
+}
+
+void free_queue(struct _process **head)
+{
+    struct _process *iter = *head;
+    struct _data *iter2 = NULL;
+    struct _process *temp_proc = NULL;
+    struct _data *temp_data = NULL;
+    
+    while(iter)
+    {
+        iter2 = iter->time_data;
+        while(iter2)
+        {
+            temp_data = iter2;
+            iter2 = iter2->next;
+            
+            free(temp_data);
+            temp_data = NULL;
+        }
+        
+        temp_proc = iter;
+        
+        if(iter->next) // if last node, there will be no previous node.
+            iter->next->prev = NULL;
+       
+        *head = iter->next;
+        iter = iter->next;
+        
+        free(temp_proc);
+        temp_proc = NULL;
+    }
+}
+
+void turnaround_wait_time(struct _process *queue, float *avg_turnaround_time, float *avg_waiting_time)
+{
+    //struct to keep waiting time and turnaround time for each process
+    struct _tat{
+        int turnaround_time;
+        int waiting_time;
+    };
+    
+    struct _tat *arr= NULL;
+    struct _data *last_time = NULL;
+    struct _process *iter = NULL;
+    struct _data *iter2 = NULL;
+    
+    int num_proc = 0;
+    int index = 0;
+    int wait_time = 0;
+    
+    int avg_wait_time = 0;
+    int avg_turn_time = 0;
+    
+    num_proc = queue_length(queue); //find number of processes
+        
+    arr = malloc(num_proc*sizeof(struct _tat)); // dynamically create array
+    
+    iter = queue; //start at beginning of queue
+    
+    while(iter)
+    {
+        last_time = get_last_time_node(iter);
+        arr[index].turnaround_time = last_time->start_time + last_time->run_time - iter->arrival;
+
+        wait_time = 0;
+
+        iter2 = iter->time_data;
+        while(iter2->next)
+        {
+            wait_time -= iter2->run_time;
+            iter2=iter2->next;
+        }
+        wait_time += (iter2->start_time-iter->arrival);
+        arr[index].waiting_time = wait_time;
+        
+        printf("%s %d %d\n",iter->ID, arr[index].waiting_time, arr[index].turnaround_time);
+        iter = iter->next;
+        index++;
+    }
+    
+    for(int i = 0; i < num_proc; i++)
+    {
+        avg_wait_time += arr[i].waiting_time;
+        avg_turn_time += arr[i].turnaround_time;
+    }
+    
+    *avg_waiting_time = ((float)avg_wait_time)/num_proc;
+    *avg_turnaround_time = ((float)avg_turn_time)/num_proc;
+    
+    free(arr);
+    arr = NULL;
+    
 }

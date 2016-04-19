@@ -1,10 +1,16 @@
-#include "RR.h"
+#include "SJF.h"
 #include "queue.h"
-#include <limits.h>
 #include <stdio.h>
+#include <limits.h>
 
 int PP(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
 {
+    /* Ideas:
+    *   Load from process queue into ready queue when the time is right.
+    *   sort ready queue according to time left
+    *   run ready queue until new process arrives, repeat
+    */
+    
     int runtime = 0;
     int next_run_time = 0;
     int time_left = 0;
@@ -64,41 +70,41 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         // fix for empty queue    
         if(!*process_queue)
             next_run_time = INT_MAX;
-        
-        sort_queue(*ready_queue,sort_by_priority);
             
         //fix for long wait between processes                 
         isempty = 0;
+        
+        sort_queue(*ready_queue, sort_by_priority);
         
         //start at head of queue            
         iter = *ready_queue;
         while(iter)
         {
-            // check if process is done.
+            // check time left for process
             time_left = iter->burst - proc_time_done(iter);
-            if(time_left > quantum)
+            
+            // check if this process can complete before next one arrives
+            if(runtime + time_left > next_run_time)
             {
                 last_time = get_last_time_node(iter);
                 if(last_time && last_time->start_time+last_time->run_time == runtime)
                 {
-                    last_time->run_time =  last_time->run_time + quantum;
+                    last_time->run_time =  last_time->run_time + next_run_time-runtime;
                 }
                 else
                 {
                     //add info to time done
                     temp_time_data.start_time = runtime;
-                    temp_time_data.run_time = quantum;
+                    temp_time_data.run_time = next_run_time-runtime;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
-                if(iter->priority>0)
-                    iter->priority--;
                 //move runtime on by quantum
-                runtime += quantum;
+                runtime = next_run_time;
                 temp_ptr = iter;
                 iter = iter->next;
                 //move process to temp queue to re add later
                 temp_proc = remove_proc_node(&*ready_queue, temp_ptr);
-                add_proc_node(&temp_queue,temp_proc);                   
+                add_proc_node(&temp_queue,temp_proc);
             }
             else
             {
@@ -110,13 +116,10 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                 }
                 else
                 {
-                    //add info to time done
                     temp_time_data.start_time = runtime;
                     temp_time_data.run_time = time_left;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
-                if(iter->priority>0)
-                    iter->priority--;
                 temp_ptr = iter;
                 iter = iter->next; // point to next node
                 //move process to done queue
