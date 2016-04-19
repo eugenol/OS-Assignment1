@@ -69,7 +69,7 @@ int RR(struct _process **process_queue, struct _process **ready_queue, struct _p
         isempty = 0;
         
         //start at head of queue            
-        iter = *ready_queue;;
+        iter = *ready_queue;
         while(iter)
         {
             // check if process is done.

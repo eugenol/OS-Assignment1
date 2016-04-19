@@ -182,19 +182,39 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
 {
     int last_run_time_item1 = 0;
     int last_run_time_item2 = 0;
+    struct _data *iter_item1 = NULL;
+    struct _data *iter_item2 = NULL;
     
     if(item1->priority < item2->priority)
         return 1;
     else if (item1->priority == item2->priority)
     {
-       /* //if equal priorities, run the one that hasnt run the longest
-        if(!item1->time_data)
-            last_run_time_item1 = 0;
-        else
-        {
-       
-        }*/
+        iter_item1 = item1->time_data;
+        iter_item2 = item2->time_data;
         
+        if(iter_item1)
+        {
+            while(iter_item1->next)
+                iter_item1 = iter_item1->next;
+            
+            last_run_time_item1 = iter_item1->start_time + iter_item1->run_time;
+             
+        }
+        
+        if(iter_item2)
+        {
+            while(iter_item2->next)
+                iter_item2 = iter_item2->next;
+            
+            last_run_time_item2 = iter_item2->start_time + iter_item2->run_time;
+             
+        }
+        
+        //if equal priorities, run the one that hasnt run the longest
+        if(last_run_time_item1 < last_run_time_item2)
+            return 1;
+        else
+            return 0;
     }
     else
         return 0;
