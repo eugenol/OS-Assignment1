@@ -107,7 +107,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
-                    iter->priority = iter->priority - 1;
+                    iter->priority--;
                 //move runtime on by quantum
                 runtime += frac_run_time;
                 
@@ -148,7 +148,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
-                    iter->priority = iter->priority - 1;
+                    iter->priority--;
                     
                 //move runtime forward by time_left
                 runtime += frac_run_time;
