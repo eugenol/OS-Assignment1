@@ -65,7 +65,15 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         if(!*process_queue)
             next_run_time = INT_MAX;
         
+        printf("Unsorted:\n");
+        print_proc_nodes(*ready_queue);
+        printf("\n");
+        
         sort_queue(*ready_queue,sort_by_priority);
+        
+        printf("Sorted:\n");    
+        print_proc_nodes(*ready_queue);
+        printf("\n\n");
             
         //fix for long wait between processes                 
         isempty = 0;
@@ -91,14 +99,13 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
-                    iter->priority--;
+                    iter->priority = iter->priority - 1;
                 //move runtime on by quantum
                 runtime += quantum;
-                temp_ptr = iter;
-                iter = iter->next;
-                //move process to temp queue to re add later
-                temp_proc = remove_proc_node(&*ready_queue, temp_ptr);
-                add_proc_node(&temp_queue,temp_proc);                   
+                
+                sort_queue(*ready_queue,sort_by_priority);
+                iter =  *ready_queue;
+                  
             }
             else
             {
@@ -116,7 +123,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
-                    iter->priority--;
+                    iter->priority = iter->priority - 1;
                 temp_ptr = iter;
                 iter = iter->next; // point to next node
                 //move process to done queue

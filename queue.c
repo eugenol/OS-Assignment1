@@ -69,8 +69,8 @@ void print_proc_nodes(struct _process *head)
        
     while(iter)
     {
-        //printf("%s %d ",iter->ID, iter->arrival);
-        printf("%s ",iter->ID);
+        printf("%s %d ",iter->ID, iter->priority);
+        //printf("%s ",iter->ID);
         iter2 = iter->time_data;
         while(iter2)
         {
@@ -215,7 +215,7 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
         }
         else
         {
-            last_run_time_item1 = INT_MAX;
+            last_run_time_item1 = INT_MIN;
         }
         
         if(iter_item2)
@@ -228,14 +228,21 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
         }
         else
         {
-            last_run_time_item2 = INT_MAX;
+            last_run_time_item2 = INT_MIN;
         }
         
         //if equal priorities, run the one that hasnt run the longest
-        if(last_run_time_item1 > last_run_time_item2)
-            return 1;
-        else
+        if(last_run_time_item1 < last_run_time_item2)
             return 0;
+        else if (last_run_time_item1==last_run_time_item2)
+        {
+            if(item1->arrival < item2->arrival)
+                return 0;
+            else
+                return 1;
+        }
+        else
+            return 1;
     }
     else
         return 0;
