@@ -243,10 +243,20 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
 
 int sort_by_name(struct _process *item1, struct _process *item2)
 {  
+    long int val1, val2;
+    char *str1 = item1->ID;
+    char *str2 = item2->ID;
+    
+    val1 = strtol(str1+7,NULL,10);
+    val2 = strtol(str2+7,NULL,10);
+    
+    return (val1 > val2);
+    /*
     if(strcmp(item1->ID,item2->ID) > 0)
         return 1;
     else
         return 0;
+   */
 }
 
 void assign_pid(struct _process *head)
