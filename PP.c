@@ -82,57 +82,95 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         iter = *ready_queue;
         while(iter)
         {
+            int frac_run_time = 0;
+            int set_break = 0;
             // check if process is done.
+            isempty = 1;
+            
             time_left = iter->burst - proc_time_done(iter);
             if(time_left > quantum)
             {
+                
+                if(runtime + quantum > next_run_time)
+                {
+                    frac_run_time = next_run_time-runtime;
+                    set_break = 1;
+                }
+                else
+                {
+                    frac_run_time = quantum;
+                    set_break = 0;
+                }
+                
                 last_time = get_last_time_node(iter);
                 if(last_time && last_time->start_time+last_time->run_time == runtime)
                 {
-                    last_time->run_time =  last_time->run_time + quantum;
+                    last_time->run_time =  last_time->run_time + frac_run_time;
                 }
                 else
                 {
                     //add info to time done
                     temp_time_data.start_time = runtime;
-                    temp_time_data.run_time = quantum;
+                    temp_time_data.run_time = frac_run_time;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
                     iter->priority = iter->priority - 1;
                 //move runtime on by quantum
-                runtime += quantum;
+                runtime += frac_run_time;
                 
+                if(set_break)
+                    break;
+                    
                 sort_queue(*ready_queue,sort_by_priority);
                 iter =  *ready_queue;
                   
             }
             else
             {
+                int frac_run_time = 0;
+                int set_break = 0;
+                
+                if(runtime + time_left > next_run_time)
+                {
+                    frac_run_time = next_run_time-runtime;
+                    set_break = 1;
+                }
+                else
+                {
+                    frac_run_time = time_left;
+                    set_break = 0;
+                }
+                
                 //add info to time done
                 last_time = get_last_time_node(iter);
                 if(last_time && last_time->start_time+last_time->run_time == runtime)
                 {
-                    last_time->run_time =  last_time->run_time + time_left;
+                    last_time->run_time =  last_time->run_time + frac_run_time;
                 }
                 else
                 {
                     //add info to time done
                     temp_time_data.start_time = runtime;
-                    temp_time_data.run_time = time_left;
+                    temp_time_data.run_time = frac_run_time;
                     add_time_node(&iter->time_data,temp_time_data);
                 }
                 if(iter->priority>0)
                     iter->priority = iter->priority - 1;
+                    
+                //move runtime forward by time_left
+                runtime += frac_run_time;
+                
+                if(set_break)
+                    break;
+                    
                 temp_ptr = iter;
                 iter = iter->next; // point to next node
                 //move process to done queue
                 temp_proc = remove_proc_node(&*ready_queue, temp_ptr);
                 add_proc_node(&*done_queue,temp_proc);
-                //move runtime forward by time_left
-                runtime += time_left;
+
             }
-            isempty = 1;
             
             if(runtime >= next_run_time)
             {
