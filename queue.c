@@ -168,7 +168,7 @@ int sort_by_time_left(struct _process *item1, struct _process *item2)
     else
         return 0;
 }
-
+// fix this
 int sort_by_priority(struct _process *item1, struct _process *item2)
 {
     int last_run_time_item1 = 0;
@@ -191,6 +191,10 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
             last_run_time_item1 = iter_item1->start_time + iter_item1->run_time;
              
         }
+        else
+        {
+            last_run_time_item1 = INT_MAX;
+        }
         
         if(iter_item2)
         {
@@ -200,9 +204,13 @@ int sort_by_priority(struct _process *item1, struct _process *item2)
             last_run_time_item2 = iter_item2->start_time + iter_item2->run_time;
              
         }
+        else
+        {
+            last_run_time_item2 = INT_MAX;
+        }
         
         //if equal priorities, run the one that hasnt run the longest
-        if(last_run_time_item1 < last_run_time_item2)
+        if(last_run_time_item1 > last_run_time_item2)
             return 1;
         else
             return 0;
