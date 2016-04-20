@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     }
 
 
-    printf("Running Simulation on %s with %s Sceduler.\n",input_file, scheduler_type);
+    printf("Running Simulation on %s with %s Sceduler.\n\n",input_file, scheduler_type);
 
     //Now, read all the data in from the spesified input file
 	fptr = fopen(input_file,"r");	
@@ -136,19 +136,19 @@ int main(int argc, char **argv)
     turnaround_wait_time(done_queue, &avg_turnaround_time, &avg_waiting_time);
     
     
-    printf("Number of processes: %d\n",queue_length(done_queue));
+    printf("\nNumber of processes: %d\n",queue_length(done_queue));
     printf("Total Run Time: %d\n",total_run_time);
     printf("Throughput: %f\n", (float)queue_length(done_queue)/total_run_time);
     printf("Average turnaround time: %f\n", avg_turnaround_time);
-    printf("Average waiting time: %f\n", avg_waiting_time);
+    printf("Average waiting time: %f\n\n", avg_waiting_time);
     
     //create output file name
     sprintf(output_file,"output-%s.txt",scheduler_type);
     
     fptr = fopen(output_file,"w");
-    fprintf(fptr,"Simulation Results: %s Scheduler.\n",scheduler_type);
+    fprintf(fptr,"Simulation Results: %s Scheduler.\n\n",scheduler_type);
     print_proc_nodes_to_file(done_queue, fptr);
-    fprintf(fptr,"Number of processes: %d\n",queue_length(done_queue));
+    fprintf(fptr,"\nNumber of processes: %d\n",queue_length(done_queue));
     fprintf(fptr,"Total Run Time: %d\n",total_run_time);
     fprintf(fptr,"Throughput: %f\n", (float)queue_length(done_queue)/total_run_time);
     fprintf(fptr,"Average turnaround time: %f\n", avg_turnaround_time);
