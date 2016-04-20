@@ -69,8 +69,8 @@ void print_proc_nodes(struct _process *head)
        
     while(iter)
     {
-        printf("%s %d ",iter->ID, iter->priority);
-        //printf("%s ",iter->ID);
+        //printf("%s %d ",iter->ID, iter->priority);
+        printf("%s ",iter->ID);
         iter2 = iter->time_data;
         while(iter2)
         {

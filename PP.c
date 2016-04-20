@@ -64,17 +64,9 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         // fix for empty queue    
         if(!*process_queue)
             next_run_time = INT_MAX;
-        
-        printf("Unsorted:\n");
-        print_proc_nodes(*ready_queue);
-        printf("\n");
-        
+                
         sort_queue(*ready_queue,sort_by_priority);
-        
-        printf("Sorted:\n");    
-        print_proc_nodes(*ready_queue);
-        printf("\n\n");
-            
+                   
         //fix for long wait between processes                 
         isempty = 0;
         
