@@ -157,38 +157,6 @@ int main(int argc, char **argv)
     fclose(fptr);
    
     free_queue(&done_queue);
-   
-    // testing
-    // below is for testing  
-    /*
-    add_time_node(&process_queue->time_data,temp_data);
-    add_time_node(&process_queue->time_data,temp_data);
-    
-    printf("With pid:\n");
-    print_proc_nodes(process_queue);
-    printf("Queue length: %d\n",queue_length(process_queue));
-    
-    //remove_proc_node_from_front(&process_queue);
-    
-    printf("With pid:\n");
-    print_proc_nodes(process_queue);
-    printf("Queue length: %d\n",queue_length(process_queue));
-    
-    printf("Queue length: %d\n",queue_length(done_queue));
-    
-    printf("Total proc time: %d\n", proc_time_done(process_queue));
-    printf("Total proc time: %d\n", proc_time_done(process_queue->next));
-    
-    printf("Original");
-    print_proc_nodes(process_queue);
-    remove_proc_node(&process_queue,process_queue);
-    printf("Head Removed\n");
-    print_proc_nodes(process_queue);
-    remove_proc_node(&process_queue,process_queue->next->next);
-    printf("Other removed\n");
-    print_proc_nodes(process_queue);
-    */
-    //free lists - NB. have to do this still
-    
+        
 	return EXIT_SUCCESS;	
 }
