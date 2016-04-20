@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     // arg c has to be at least 3 - name of program, and 2 arguments    	
 	if (argc < 3)
 	{
-		printf("Usage is: sheduler <Scheduler> <quantum (optional)> <input file>");
+		printf("Usage is: scheduler <Scheduler> <quantum (optional)> <input file>");
 		return EXIT_FAILURE;
 	}
     
