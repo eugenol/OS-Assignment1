@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 	int quantum = 0;
     char input_file[21] = {0};
 	char scheduler_type[5] ={0};
+    char output_file[20] = {0};
     struct _process temp_process = {{0},0,0,0,0,NULL,NULL,NULL};
     struct _process *process_queue = NULL;
     struct _process *ready_queue = NULL;
@@ -46,7 +47,7 @@ int main(int argc, char **argv)
     // arg c has to be at least 3 - name of program, and 2 arguments    	
 	if (argc < 3)
 	{
-		printf("Usage is: sheduler <input file> <Scheduler> <quantum (optional)>");
+		printf("Usage is: sheduler <Scheduler> <quantum (optional)> <input file>");
 		return EXIT_FAILURE;
 	}
     
@@ -54,9 +55,15 @@ int main(int argc, char **argv)
     // 1st arg is scheduler algorithm to use
     // 2rd arg is optional - only needed for round robin - quantum
     // 3nd arg is the name of the input file
- 
+    
+    // in case scheduler name does not fit in the string
+    if(strlen(argv[1])> 4)
+    {
+        printf("Unknown Scheduler.\n");
+        return EXIT_FAILURE;
+    }
+    
     strcpy(scheduler_type, argv[1]); 
-    printf("%s\n",scheduler_type);
        
     //if round robin or priority with preemption, read quantum and input file in argv[3]
     //otherwise inputfile is in argv[2]
@@ -96,9 +103,7 @@ int main(int argc, char **argv)
     }
 
 
-    printf("%s\n",input_file);
-    printf("%d\n",quantum);
-    printf("%d\n",scheduler);
+    printf("Running Simulation on %s with %s Sceduler.\n",input_file, scheduler_type);
 
     //Now, read all the data in from the spesified input file
 	fptr = fopen(input_file,"r");	
@@ -128,14 +133,28 @@ int main(int argc, char **argv)
     sort_queue(done_queue, sort_by_name);
     print_proc_nodes(done_queue);
     
+    turnaround_wait_time(done_queue, &avg_turnaround_time, &avg_waiting_time);
+    
+    
     printf("Number of processes: %d\n",queue_length(done_queue));
     printf("Total Run Time: %d\n",total_run_time);
     printf("Throughput: %f\n", (float)queue_length(done_queue)/total_run_time);
-    
-    turnaround_wait_time(done_queue, &avg_turnaround_time, &avg_waiting_time);
-    
     printf("Average turnaround time: %f\n", avg_turnaround_time);
     printf("Average waiting time: %f\n", avg_waiting_time);
+    
+    //create output file name
+    sprintf(output_file,"output-%s.txt",scheduler_type);
+    
+    fptr = fopen(output_file,"w");
+    fprintf(fptr,"Simulation Results: %s Scheduler.\n",scheduler_type);
+    print_proc_nodes_to_file(done_queue, fptr);
+    fprintf(fptr,"Number of processes: %d\n",queue_length(done_queue));
+    fprintf(fptr,"Total Run Time: %d\n",total_run_time);
+    fprintf(fptr,"Throughput: %f\n", (float)queue_length(done_queue)/total_run_time);
+    fprintf(fptr,"Average turnaround time: %f\n", avg_turnaround_time);
+    fprintf(fptr,"Average waiting time: %f\n", avg_waiting_time);
+   
+    fclose(fptr);
    
     free_queue(&done_queue);
    
@@ -171,5 +190,5 @@ int main(int argc, char **argv)
     */
     //free lists - NB. have to do this still
     
-	return 0;	
+	return EXIT_SUCCESS;	
 }

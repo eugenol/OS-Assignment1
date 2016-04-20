@@ -1,6 +1,8 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <stdio.h>
+
 struct _data {
     int start_time;
     int run_time;
@@ -29,6 +31,7 @@ int proc_time_done(struct _process *proc);
 struct _data *get_last_time_node(struct _process *proc);
 
 void print_proc_nodes(struct _process *head);
+void print_proc_nodes_to_file(struct _process *head, FILE *fptr);
 
 int queue_length(struct _process *head);
 struct _process *new_node_address(struct _process *head);

@@ -69,8 +69,8 @@ void print_proc_nodes(struct _process *head)
        
     while(iter)
     {
-        printf("%s %d ",iter->ID, iter->arrival);
-        //printf("%s ",iter->ID);
+        //printf("%s %d ",iter->ID, iter->arrival);
+        printf("%s ",iter->ID);
         iter2 = iter->time_data;
         while(iter2)
         {
@@ -78,6 +78,27 @@ void print_proc_nodes(struct _process *head)
             iter2 = iter2->next;
             if(!iter2)
                 printf("\n");
+        }
+        iter = iter->next;
+    }    
+}
+
+void print_proc_nodes_to_file(struct _process *head, FILE *fptr)
+{
+    struct _process *iter = head;
+    struct _data *iter2;
+       
+    while(iter)
+    {
+        //printf("%s %d ",iter->ID, iter->arrival);
+        fprintf(fptr,"%s ",iter->ID);
+        iter2 = iter->time_data;
+        while(iter2)
+        {
+            fprintf(fptr,"(%d,%d) ",iter2->start_time, iter2->run_time);
+            iter2 = iter2->next;
+            if(!iter2)
+                fprintf(fptr,"\n");
         }
         iter = iter->next;
     }    
@@ -436,7 +457,7 @@ void turnaround_wait_time(struct _process *queue, float *avg_turnaround_time, fl
         wait_time += (iter2->start_time-iter->arrival);
         arr[index].waiting_time = wait_time;
         
-        printf("%s %d %d\n",iter->ID, arr[index].waiting_time, arr[index].turnaround_time);
+        //printf("%s %d %d\n",iter->ID, arr[index].waiting_time, arr[index].turnaround_time);
         iter = iter->next;
         index++;
     }
