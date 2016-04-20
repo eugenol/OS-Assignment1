@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "queue.h"
 
 void add_proc_node(struct _process **head,struct _process data)
