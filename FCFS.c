@@ -6,7 +6,6 @@
 int FCFS(struct _process **process_queue, struct _process **ready_queue, struct _process **done_queue, int quantum)
 {
     int runtime = 0;
-    //int next_run_time = 0;
     int time_done = 0;
     int isempty = 0;
     struct _process temp_proc = {{0},0,0,0,0,NULL,NULL,NULL};
@@ -22,11 +21,6 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
         temp_proc = remove_proc_node_from_front(&*process_queue);
         add_proc_node(&*ready_queue,temp_proc);
         runtime = temp_proc.arrival;
-        /*
-        if((*process_queue)->next)
-            next_run_time = (*process_queue)->next->arrival;
-        else
-            next_run_time = INT_MAX;*/
     }
     else
     {
@@ -47,15 +41,10 @@ int FCFS(struct _process **process_queue, struct _process **ready_queue, struct 
             }
             else
             {
-                //next_run_time = (*process_queue)->arrival;
                 break;
             }
         }
-        
-        // fix for empty queue    
-        //if(!*process_queue)
-        //    next_run_time = INT_MAX;
-            
+                   
         //fix for long wait between processes                 
         isempty = 0;
         
