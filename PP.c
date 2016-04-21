@@ -7,6 +7,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
 {
     int runtime = 0;
     int next_run_time = 0;
+    int next_run_priority = INT_MIN;
     int time_left = 0;
     int isempty = 0;
     struct _process temp_proc = {{0},0,0,0,0,NULL,NULL,NULL};
@@ -26,9 +27,15 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         runtime = temp_proc.arrival;
         
         if((*process_queue)->next)
+        {
             next_run_time = (*process_queue)->next->arrival;
+            next_run_priority = (*process_queue)->next->priority;
+        }
         else
+        {
             next_run_time = INT_MAX;
+            next_run_priority = INT_MIN;
+        }
     }
     else
     {
@@ -50,6 +57,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
             else
             {
                 next_run_time = (*process_queue)->arrival;
+                next_run_priority = (*process_queue)->priority;
                 break;
             }
         }
@@ -63,7 +71,10 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
         
         // fix for empty queue    
         if(!*process_queue)
+        {
             next_run_time = INT_MAX;
+            next_run_priority = INT_MIN;
+        }
                 
         sort_queue(*ready_queue,sort_by_priority);
                    
@@ -83,7 +94,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
             if(time_left > quantum)
             {
                 
-                if(runtime + quantum > next_run_time)
+                if(runtime + quantum > next_run_time && iter->priority < next_run_priority)
                 {
                     frac_run_time = next_run_time-runtime;
                     set_break = 1;
@@ -123,7 +134,7 @@ int PP(struct _process **process_queue, struct _process **ready_queue, struct _p
                 int frac_run_time = 0;
                 int set_break = 0;
                 
-                if(runtime + time_left > next_run_time)
+                if(runtime + time_left > next_run_time && iter->priority < next_run_priority)
                 {
                     frac_run_time = next_run_time-runtime;
                     set_break = 1;
