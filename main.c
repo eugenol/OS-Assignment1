@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     }
 
 
-    printf("Running Simulation on %s with %s Sceduler.\n\n",input_file, scheduler_type);
+    printf("Running simulation on %s with %s scheduler.\n\n",input_file, scheduler_type);
 
     //Now, read all the data in from the spesified input file
 	fptr = fopen(input_file,"r");	
