@@ -471,7 +471,7 @@ void turnaround_wait_time(struct _process *queue, float *avg_turnaround_time, fl
             wait_time -= iter2->run_time;
             iter2=iter2->next;
         }
-        wait_time += (iter2->start_time-iter->arrival);
+        wait_time += (iter2->start_time - iter->arrival);
         arr[index].waiting_time = wait_time;
         
         //printf("%s %d %d\n",iter->ID, arr[index].waiting_time, arr[index].turnaround_time);
